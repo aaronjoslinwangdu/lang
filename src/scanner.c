@@ -1,6 +1,6 @@
 #include "scanner.h"
+#include "debug.h"
 #include "memory.h"
-#include "token.h"
 #include <string.h>
 
 typedef struct {
@@ -15,6 +15,17 @@ void init_scanner(const char *source) {
   scanner.start = source;
   scanner.current = source;
   scanner.line = 1;
+}
+
+void init_token_array(TokenArray *tokens) {
+  tokens->count = 0;
+  tokens->capacity = 0;
+  tokens->entries = NULL;
+}
+
+void free_token_array(TokenArray *tokens) {
+  DYN_ARR_FREE(tokens);
+  init_token_array(tokens);
 }
 
 static Token make_token(TokenType type) {
@@ -210,7 +221,9 @@ void scan(const char *source, TokenArray *tokens) {
   for (;;) {
     Token token = scan_token();
     DYN_ARR_PUSH(Token, tokens, token);
-    print_token(token);
+#ifdef _LANG_DEBUG_SCANNER
+    print_token(&token);
+#endif
     if (token.type == TOKEN_EOF)
       return;
   }

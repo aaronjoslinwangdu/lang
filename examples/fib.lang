@@ -1,5 +1,9 @@
-fn fib(0) -> 0
-fn fib(1) -> 1
-fn fib(n) -> fib(n - 1) + fib(n - 2)
+fn fib(n) -> {
+  if (n <= 1) {
+    n
+  } else {
+    fib(n - 1) + fib(n - 2)
+  }
+}
 
 print(fib(3))
