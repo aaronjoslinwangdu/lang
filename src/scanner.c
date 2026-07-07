@@ -37,7 +37,7 @@ static Token make_token(TokenType type) {
   return token;
 }
 
-static bool is_at_end() { return *scanner.current == '\0'; }
+static bool is_end() { return *scanner.current == '\0'; }
 
 static char advance() {
   scanner.current++;
@@ -46,13 +46,13 @@ static char advance() {
 
 static char peek() { return *scanner.current; }
 static char peek_next() {
-  if (is_at_end())
+  if (is_end())
     return '\0';
   return scanner.current[1];
 }
 
 static bool match(char c) {
-  if (is_at_end() || *scanner.current != c) {
+  if (is_end() || *scanner.current != c) {
     return false;
   }
   scanner.current++;
@@ -76,7 +76,7 @@ static bool is_digit(char c) { return c >= '0' && c <= '9'; }
 
 static Token string() {
   for (;;) {
-    if (is_at_end())
+    if (is_end())
       return make_token(TOKEN_ERROR);
     if (advance() == '"')
       return make_token(TOKEN_STRING);
@@ -142,7 +142,7 @@ static void skip_whitespace() {
       break;
     case '/':
       if (peek_next() == '/') {
-        while (peek() != '\n' && !is_at_end()) {
+        while (peek() != '\n' && !is_end()) {
           advance();
         }
       } else {
@@ -158,7 +158,7 @@ static void skip_whitespace() {
 static Token scan_token() {
   skip_whitespace();
   scanner.start = scanner.current;
-  if (is_at_end())
+  if (is_end())
     return make_token(TOKEN_EOF);
 
   char c = advance();
