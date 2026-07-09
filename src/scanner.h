@@ -36,8 +36,6 @@ typedef enum {
   TOKEN_NUMBER,
 
   // keywords
-  TOKEN_AND,
-  TOKEN_OR,
   TOKEN_NIL,
   TOKEN_FUNCTION,
   TOKEN_IF,

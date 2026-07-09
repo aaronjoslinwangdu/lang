@@ -43,3 +43,19 @@ n = 5                       // pipe operator argument passing
   |> add_one()
   |> sub_two() 
 ```
+
+## Grammar
+
+```
+keyword     -> "fn" | "true" | "false" | "nil"
+
+expression  -> ident | literal | unary | binary | group | block | call | conditional
+
+block       -> "{" expression "}"
+group       -> "(" expression ")"
+call        -> fn "(" (expression)* ")"
+unary       -> ("-" | "!") expression
+binary      -> expression operator expression
+operator    -> ">" | ">=" | "<" | "<=" | "=" | "!=" | "==" | "+" | "-" | "*" | "/"
+literal     -> number | string | "true" | "false" | "nil" | map | tuple | list
+```

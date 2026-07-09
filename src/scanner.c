@@ -100,8 +100,6 @@ static Token digit() {
 
 static TokenType identifier_type() {
   switch (scanner.start[0]) {
-  case 'a':
-    return check_identifier(1, 2, "nd", TOKEN_AND);
   case 'e':
     return check_identifier(1, 3, "lse", TOKEN_ELSE);
   case 'f':
