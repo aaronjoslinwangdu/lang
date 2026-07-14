@@ -11,4 +11,3 @@ void free_token_array(TokenArray *tokens) {
   DYN_ARR_FREE(TokenArray, tokens, tokens->count);
   init_token_array(tokens);
 }
-

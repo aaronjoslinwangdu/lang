@@ -91,8 +91,8 @@ void print_expr(Expr *expr, int indent) {
   switch (expr->type) {
   case EXPR_UNARY: {
     Unary unary = AS_UNARY(*expr);
-    printf("type = UNARY, op = %s,\n%*sexpr = ",
-           printable_token_type(unary.op), indent + 2, "");
+    printf("type = UNARY, op = %s,\n%*sexpr = ", printable_token_type(unary.op),
+           indent + 2, "");
     print_expr(unary.expr, indent + 2);
     printf("%*s}\n", indent, "");
     return;
