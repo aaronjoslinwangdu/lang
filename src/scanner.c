@@ -211,7 +211,7 @@ void scan(const char *source, TokenArray *tokens) {
   for (;;) {
     Token token = scan_token();
     DYN_ARR_PUSH(Token, tokens, token);
-#ifdef _LANG_DEBUG_SCANNER
+#ifdef _PEACH_DEBUG_SCANNER
     print_token(&token);
 #endif
     if (token.type == TOKEN_EOF)

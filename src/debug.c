@@ -80,14 +80,14 @@ char *printable_token_type(TokenType type) {
 }
 
 void print_token(Token *token) {
-  printf("Token = { ");
+  printf("Token { ");
   printf("type = %12s, ", printable_token_type(token->type));
   printf("lexeme = '%.*s', ", token->length, token->start);
-  printf("line = %04d }\n", token->line);
+  printf("line = %d }\n", token->line);
 }
 
 void print_expr(Expr *expr, int indent) {
-  printf("Expr { line = %04d, ", expr->line);
+  printf("Expr { line = %d, ", expr->line);
   switch (expr->type) {
   case EXPR_UNARY: {
     Unary unary = AS_UNARY(*expr);

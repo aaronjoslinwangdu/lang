@@ -1,5 +1,5 @@
-#ifndef _LANG_AST_H
-#define _LANG_AST_H
+#ifndef _PEACH_AST_H
+#define _PEACH_AST_H
 
 #include "common.h"
 #include "memory.h"

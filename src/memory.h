@@ -1,5 +1,5 @@
-#ifndef _LANG_MEMORY_H
-#define _LANG_MEMORY_H
+#ifndef _PEACH_MEMORY_H
+#define _PEACH_MEMORY_H
 
 #include "common.h"
 

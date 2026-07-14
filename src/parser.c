@@ -169,7 +169,7 @@ void parse(TokenArray *tokens, Arena *arena) {
   init_parser(&parser, tokens, arena);
   while (!is_end(&parser)) {
     Expr *expr = expression(&parser);
-#ifdef _LANG_DEBUG_PARSER
+#ifdef _PEACH_DEBUG_PARSER
     print_expr(expr, 0);
 #endif
   }

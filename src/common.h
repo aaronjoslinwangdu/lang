@@ -1,8 +1,8 @@
-#ifndef _LANG_COMMON_H
-#define _LANG_COMMON_H
+#ifndef _PEACH_COMMON_H
+#define _PEACH_COMMON_H
 
-// #define _LANG_DEBUG_SCANNER
-#define _LANG_DEBUG_PARSER
+#define _PEACH_DEBUG_SCANNER
+#define _PEACH_DEBUG_PARSER
 
 #include <stdbool.h>
 #include <stddef.h>

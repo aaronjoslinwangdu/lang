@@ -1,5 +1,5 @@
-#ifndef _LANG_DEBUG_H
-#define _LANG_DEBUG_H
+#ifndef _PEACH_DEBUG_H
+#define _PEACH_DEBUG_H
 
 #include "token.h"
 #include "ast.h"

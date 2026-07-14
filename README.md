@@ -1,4 +1,4 @@
-# Unnamed Language
+# Peach Lang
 
 ## Ideas
 

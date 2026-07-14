@@ -1,5 +1,5 @@
-#ifndef _LANG_PARSER_H
-#define _LANG_PARSER_H
+#ifndef _PEACH_PARSER_H
+#define _PEACH_PARSER_H
 
 #include "ast.h"
 #include "token.h"

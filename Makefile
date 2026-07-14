@@ -1,4 +1,4 @@
-TARGET 		:= build/lang
+TARGET 		:= build/peach
 SOURCES 	:= $(wildcard src/*.c)
 OBJECTS 	:= $(SOURCES:src/%.c=build/%.o)
 FLAGS			:= -Wall -Wextra -g -MMD -MP

@@ -1,5 +1,5 @@
-#ifndef _LANG_SCANNER_H
-#define _LANG_SCANNER_H
+#ifndef _PEACH_SCANNER_H
+#define _PEACH_SCANNER_H
 
 #include "token.h"
 
