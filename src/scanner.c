@@ -128,6 +128,10 @@ static void skip_whitespace() {
     case '\r':
       advance();
       break;
+    case '\n':
+      scanner.line++;
+      advance();
+      break;
     case '/':
       if (peek_next() == '/') {
         while (peek() != '\n' && !is_end()) {
@@ -196,8 +200,6 @@ static Token scan_token() {
     return make_token(TOKEN_DOT);
   case ':':
     return make_token(TOKEN_COLON);
-  case '\n':
-    return make_token(TOKEN_NEWLINE);
   case '"':
     return string();
   }
@@ -209,8 +211,6 @@ void scan(const char *source, TokenArray *tokens) {
   for (;;) {
     Token token = scan_token();
     DYN_ARR_PUSH(Token, tokens, token);
-    if (token.type == TOKEN_NEWLINE)
-      scanner.line++;
 #ifdef _LANG_DEBUG_SCANNER
     print_token(&token);
 #endif

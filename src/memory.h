@@ -3,6 +3,20 @@
 
 #include "common.h"
 
+#ifndef DEFAULT_ALIGNMENT
+#define DEFAULT_ALIGNMENT (2 * sizeof(void *))
+#endif
+
+typedef struct {
+  unsigned char *buffer;
+  size_t buffer_size;
+  size_t allocated;
+} Arena;
+
+void arena_init(Arena *arena, unsigned char *buffer, size_t buffer_size);
+void *arena_allocate(Arena *arena, size_t size, size_t align);
+void arena_reset(Arena *arena);
+
 #define ALLOCATE(type, count)                                                  \
   (type *)reallocate(NULL, 0, sizeof(type) * (count))
 

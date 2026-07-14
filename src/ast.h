@@ -2,13 +2,13 @@
 #define _LANG_AST_H
 
 #include "common.h"
+#include "memory.h"
 #include "token.h"
 
 typedef enum {
+  EXPR_GROUPING,
   EXPR_UNARY,
   EXPR_BINARY,
-  EXPR_GROUP,
-  EXPR_BLOCK,
   EXPR_CALL,
   EXPR_VAR,
   EXPR_STRING,
@@ -21,15 +21,14 @@ typedef struct Expr Expr;
 
 typedef struct {
   Expr *expr;
-} Group;
+} Grouping;
 
 typedef struct {
   Expr **expr;
 } Block;
 
 typedef struct {
-  const char *start;
-  int length;
+  const char *name;
 } Var;
 
 typedef struct {
@@ -51,7 +50,7 @@ typedef struct Expr {
   ExprType type;
   int line;
   union {
-    Group group;
+    Grouping grouping;
     Block block;
     Call call;
     Unary unary;
@@ -63,12 +62,22 @@ typedef struct Expr {
   } as;
 } Expr;
 
-typedef struct {
-  int count;
-  int capacity;
-  Expr *entries;
-} ExprArray;
+Expr *make_nil(Arena *arena, int line);
+Expr *make_boolean(Arena *arena, int line, bool value);
+Expr *make_number(Arena *arena, int line, double value);
+Expr *make_var(Arena *arena, int line, char *start, int length);
+Expr *make_string(Arena *arena, int line, char *start, int length);
+Expr *make_unary(Arena *arena, int line, TokenType op, Expr *expr);
+Expr *make_binary(Arena *arena, int line, TokenType op, Expr *left,
+                  Expr *right);
+Expr *make_grouping(Arena *arena, int line, Expr *expr);
 
-void init_expr_array(ExprArray *exprs);
+#define AS_BOOLEAN(expression) (bool)(expression).as.boolean
+#define AS_NUMBER(expression) (double)(expression).as.number
+#define AS_STRING(expression) (char *)(expression).as.string
+#define AS_VAR(expression) (Var)(expression).as.var
+#define AS_UNARY(expression) (Unary)(expression).as.unary
+#define AS_BINARY(expression) (Binary)(expression).as.binary
+#define AS_GROUPING(expression) (Grouping)(expression).as.grouping
 
 #endif

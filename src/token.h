@@ -20,7 +20,6 @@ typedef enum {
   TOKEN_COMMA,
   TOKEN_DOT,
   TOKEN_COLON,
-  TOKEN_NEWLINE,
 
   // two char
   TOKEN_BANG_EQUAL,
@@ -28,6 +27,8 @@ typedef enum {
   TOKEN_ARROW,
   TOKEN_LESS_EQUAL,
   TOKEN_GREATER_EQUAL,
+  TOKEN_OR,
+  TOKEN_AND,
   TOKEN_PIPE,
 
   // literals

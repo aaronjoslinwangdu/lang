@@ -1,7 +1,18 @@
+#include "memory.h"
 #include "parser.h"
 #include "scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+void run(char *input) {
+  TokenArray tokens;
+  init_token_array(&tokens);
+  scan(input, &tokens);
+  unsigned char buffer[8192];
+  Arena arena;
+  arena_init(&arena, buffer, 8192);
+  parse(&tokens, &arena);
+}
 
 void repl() {
   char input[1024];
@@ -14,18 +25,7 @@ void repl() {
       break;
     }
 
-    TokenArray tokens;
-    printf("made tokens\n");
-    init_token_array(&tokens);
-    printf("init'd tokens\n");
-    scan(input, &tokens);
-    printf("scanned tokens\n");
-    ExprArray exprs;
-    printf("made exprs\n");
-    init_expr_array(&exprs);
-    printf("init'd exprs\n");
-    parse(&tokens, &exprs);
-    printf("parsed\n");
+    run(input);
   }
 }
 
@@ -49,12 +49,7 @@ void run_file(const char *path) {
   fclose(file);
   source[bytes_read] = '\0';
 
-  TokenArray tokens;
-  init_token_array(&tokens);
-  scan(source, &tokens);
-  ExprArray exprs;
-  init_expr_array(&exprs);
-  parse(&tokens, &exprs);
+  run(source);
 }
 
 int main(int argc, char **argv) {

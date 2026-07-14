@@ -4,6 +4,6 @@
 #include "ast.h"
 #include "token.h"
 
-void parse(TokenArray *tokens, ExprArray *exprs);
+void parse(TokenArray *tokens, Arena *arena);
 
 #endif

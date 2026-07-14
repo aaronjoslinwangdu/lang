@@ -5,6 +5,6 @@
 #include "ast.h"
 
 void print_token(Token *token);
-void print_expr(Expr *expr);
+void print_expr(Expr *expr, int indent);
 
 #endif
