@@ -1,9 +1,15 @@
 #include "memory.h"
+
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef DEFAULT_ALIGNMENT
+// TODO: probably can use alignof or something
+#define DEFAULT_ALIGNMENT (2 * sizeof(void *))
+#endif
 
 void arena_init(Arena *arena, unsigned char *buffer, size_t buffer_size) {
   arena->buffer = buffer;
@@ -23,7 +29,8 @@ static uintptr_t arena_align(uintptr_t pointer, uintptr_t align) {
   return aligned;
 }
 
-void *arena_allocate(Arena *arena, size_t size, size_t align) {
+// TODO: page-based allocation
+void *_arena_allocate(Arena *arena, size_t size, size_t align) {
   uintptr_t end = (uintptr_t)arena->buffer + (uintptr_t)arena->allocated;
   uintptr_t offset = arena_align(end, (uintptr_t)align);
   offset -= (uintptr_t)arena->buffer;
@@ -37,6 +44,10 @@ void *arena_allocate(Arena *arena, size_t size, size_t align) {
   arena->allocated = offset + size;
   memset(pointer, 0, size);
   return pointer;
+}
+
+void *arena_allocate(Arena *arena, size_t size) {
+  return _arena_allocate(arena, size, DEFAULT_ALIGNMENT);
 }
 
 void arena_reset(Arena *arena) { arena->allocated = 0; };

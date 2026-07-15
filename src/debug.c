@@ -1,5 +1,6 @@
 #include "debug.h"
 #include "ast.h"
+
 #include <stdio.h>
 
 char *printable_token_type(TokenType type) {
@@ -90,15 +91,15 @@ void print_expr(Expr *expr, int indent) {
   printf("Expr { line = %d, ", expr->line);
   switch (expr->type) {
   case EXPR_UNARY: {
-    Unary unary = AS_UNARY(*expr);
-    printf("type = UNARY, op = %s,\n%*sexpr = ", printable_token_type(unary.op),
+    Unary unary = expr->as.unary;
+    printf("type = UNARY, op = %s,\n%*sleft = ", printable_token_type(unary.op),
            indent + 2, "");
-    print_expr(unary.expr, indent + 2);
+    print_expr(unary.left, indent + 2);
     printf("%*s}\n", indent, "");
     return;
   }
   case EXPR_BINARY: {
-    Binary binary = AS_BINARY(*expr);
+    Binary binary = expr->as.binary;
     printf("type = BINARY, op = %s,\n%*sleft = ",
            printable_token_type(binary.op), indent + 2, "");
     print_expr(binary.left, indent + 2);
@@ -111,30 +112,38 @@ void print_expr(Expr *expr, int indent) {
     printf("type = CALL }\n");
     return;
   case EXPR_VAR: {
-    Var var = AS_VAR(*expr);
-    printf("type = VAR, name = %s }\n", var.name);
+    printf("type = VAR, name = %s }\n", expr->as.var.name);
     return;
   }
   case EXPR_STRING: {
-    printf("type = STRING, value = %s }\n", AS_STRING(*expr));
+    printf("type = STRING, value = %s }\n", expr->as.string);
     return;
   }
   case EXPR_NUMBER:
-    printf("type = NUMBER, value = %f }\n", AS_NUMBER(*expr));
+    printf("type = NUMBER, value = %f }\n", expr->as.number);
     return;
   case EXPR_BOOLEAN:
     printf("type = BOOLEAN, value = %s }\n",
-           AS_BOOLEAN(*expr) ? "true" : "false");
+           expr->as.boolean ? "true" : "false");
     return;
   case EXPR_NIL:
     printf("type = NIL }\n");
     return;
   case EXPR_GROUPING: {
-    Grouping grouping = AS_GROUPING(*expr);
+    Grouping grouping = expr->as.grouping;
     printf("type = GROUPING,\n%*sexpr = ", indent + 2, "");
     print_expr(grouping.expr, indent + 2);
     printf("%*s}\n", indent, "");
     return;
+  }
+  case EXPR_BLOCK: {
+    Block block = expr->as.block;
+    printf("type = BLOCK,\n");
+    for (int i = 0; i < block.exprs->count; i++) {
+      printf("%*sexpr = ", indent + 2, "");
+      print_expr(block.exprs->entries[i], indent + 2);
+    }
+    printf("%*s}\n", indent, "");
   }
   }
 }

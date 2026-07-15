@@ -1,10 +1,16 @@
 #include "ast.h"
 #include "memory.h"
+
 #include <string.h>
 
+void init_expr_array(ExprArray *exprs) {
+  exprs->count = 0;
+  exprs->capacity = 0;
+  exprs->entries = NULL;
+}
+
 Expr *make_expr(Arena *arena, ExprType type, int line) {
-  // TODO: real alignment arg
-  Expr *expr = arena_allocate(arena, sizeof(*expr), (2 * sizeof(void *)));
+  Expr *expr = arena_allocate(arena, sizeof(*expr));
   expr->type = type;
   expr->line = line;
   return expr;
@@ -28,8 +34,7 @@ Expr *make_number(Arena *arena, int line, double value) {
 
 Expr *make_string(Arena *arena, int line, char *start, int length) {
   Expr *expr = make_expr(arena, EXPR_STRING, line);
-  // TODO: real alignment arg
-  char *str = arena_allocate(arena, length + 1, (2 * sizeof(void *)));
+  char *str = arena_allocate(arena, length + 1);
   memcpy(str, start, length);
   str[length] = '\0';
   expr->as.string = str;
@@ -38,19 +43,18 @@ Expr *make_string(Arena *arena, int line, char *start, int length) {
 
 Expr *make_var(Arena *arena, int line, char *start, int length) {
   Expr *expr = make_expr(arena, EXPR_VAR, line);
-  // TODO: real alignment arg
-  char *name = arena_allocate(arena, length + 1, (2 * sizeof(void *)));
+  char *name = arena_allocate(arena, length + 1);
   memcpy(name, start, length);
   name[length] = '\0';
   expr->as.var.name = name;
   return expr;
 }
 
-Expr *make_unary(Arena *arena, int line, TokenType op, Expr *expr) {
-  Expr *unary = make_expr(arena, EXPR_UNARY, line);
-  unary->as.unary.op = op;
-  unary->as.unary.expr = expr;
-  return unary;
+Expr *make_unary(Arena *arena, int line, TokenType op, Expr *left) {
+  Expr *expr = make_expr(arena, EXPR_UNARY, line);
+  expr->as.unary.op = op;
+  expr->as.unary.left = left;
+  return expr;
 }
 
 Expr *make_binary(Arena *arena, int line, TokenType op, Expr *left,
@@ -66,4 +70,10 @@ Expr *make_grouping(Arena *arena, int line, Expr *expr) {
   Expr *grouping = make_expr(arena, EXPR_GROUPING, line);
   grouping->as.grouping.expr = expr;
   return grouping;
+}
+
+Expr *make_block(Arena *arena, int line, ExprArray *exprs) {
+  Expr *block = make_expr(arena, EXPR_BLOCK, line);
+  block->as.block.exprs = exprs;
+  return block;
 }

@@ -6,6 +6,7 @@
 #include "token.h"
 
 typedef enum {
+  EXPR_BLOCK,
   EXPR_GROUPING,
   EXPR_UNARY,
   EXPR_BINARY,
@@ -20,11 +21,17 @@ typedef enum {
 typedef struct Expr Expr;
 
 typedef struct {
+  int count;
+  int capacity;
+  Expr **entries;
+} ExprArray;
+
+typedef struct {
   Expr *expr;
 } Grouping;
 
 typedef struct {
-  Expr **expr;
+  ExprArray *exprs;
 } Block;
 
 typedef struct {
@@ -38,7 +45,7 @@ typedef struct {
 
 typedef struct {
   TokenType op;
-  Expr *expr;
+  Expr *left;
 } Unary;
 
 typedef struct {
@@ -67,17 +74,12 @@ Expr *make_boolean(Arena *arena, int line, bool value);
 Expr *make_number(Arena *arena, int line, double value);
 Expr *make_var(Arena *arena, int line, char *start, int length);
 Expr *make_string(Arena *arena, int line, char *start, int length);
-Expr *make_unary(Arena *arena, int line, TokenType op, Expr *expr);
+Expr *make_unary(Arena *arena, int line, TokenType op, Expr *left);
 Expr *make_binary(Arena *arena, int line, TokenType op, Expr *left,
                   Expr *right);
 Expr *make_grouping(Arena *arena, int line, Expr *expr);
+Expr *make_block(Arena *arena, int line, ExprArray *exprs);
 
-#define AS_BOOLEAN(expression) (bool)(expression).as.boolean
-#define AS_NUMBER(expression) (double)(expression).as.number
-#define AS_STRING(expression) (char *)(expression).as.string
-#define AS_VAR(expression) (Var)(expression).as.var
-#define AS_UNARY(expression) (Unary)(expression).as.unary
-#define AS_BINARY(expression) (Binary)(expression).as.binary
-#define AS_GROUPING(expression) (Grouping)(expression).as.grouping
+void init_expr_array(ExprArray *exprs);
 
 #endif

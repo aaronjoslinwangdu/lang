@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "memory.h"
 #include "token.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -162,7 +163,34 @@ static Expr *_or(Parser *parser) {
   return expr;
 }
 
-static Expr *expression(Parser *parser) { return _or(parser); }
+static Expr *pattern_match(Parser *parser) {
+  Expr *expr = _or(parser);
+  if (match(parser, TOKEN_EQUAL)) {
+    Expr *right = _or(parser);
+    expr = make_binary(parser->arena, previous(parser).line, TOKEN_EQUAL, expr,
+                       right);
+  }
+  return expr;
+}
+
+static Expr *block(Parser *parser) {
+  if (match(parser, TOKEN_LEFT_BRACE)) {
+    int line = previous(parser).line;
+    ExprArray *exprs = arena_allocate(parser->arena, sizeof(ExprArray *));
+    init_expr_array(exprs);
+    while (!match(parser, TOKEN_RIGHT_BRACE)) {
+      if (is_end(parser))
+        // TODO: unwind error here, don't exit
+        exit(EXIT_FAILURE);
+      Expr *expr = block(parser);
+      DYN_ARR_PUSH(Expr *, exprs, expr);
+    }
+    return make_block(parser->arena, line, exprs);
+  }
+  return pattern_match(parser);
+}
+
+static Expr *expression(Parser *parser) { return block(parser); }
 
 void parse(TokenArray *tokens, Arena *arena) {
   Parser parser;
